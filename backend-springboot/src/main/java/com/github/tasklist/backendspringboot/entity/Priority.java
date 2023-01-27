@@ -11,11 +11,13 @@ import javax.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
 @Setter
 @EqualsAndHashCode
+@ToString
 @Table(name = "priority")
 public class Priority {
     private Long id;

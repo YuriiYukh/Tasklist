@@ -16,11 +16,11 @@ import lombok.Setter;
 @Table(name = "stat")
 @EqualsAndHashCode
 public class Stat {
+    @Id
     private Long id;
     private Long uncompletedTotal;
     private Long completedTotal;
     
-    @Id
     @Column(name = "id")
     public Long gedId() {
         return id;
