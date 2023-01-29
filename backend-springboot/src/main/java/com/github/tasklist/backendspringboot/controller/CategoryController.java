@@ -30,7 +30,7 @@ public class CategoryController {
     @PostMapping("/search")
     public ResponseEntity<List<Category>> findByTitle(@RequestBody CategorySearchValues categorySearchValues) {
 
-        return ResponseEntity.ok(categoryRepository.findByTitle(categorySearchValues.getText()));
+        return ResponseEntity.ok(categoryRepository.findByTitle(categorySearchValues.getTitle()));
     }
 
     @GetMapping("/all")

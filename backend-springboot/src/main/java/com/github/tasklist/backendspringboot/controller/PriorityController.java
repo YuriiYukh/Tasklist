@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.tasklist.backendspringboot.entity.Priority;
 import com.github.tasklist.backendspringboot.repo.PriorityRepository;
+import com.github.tasklist.backendspringboot.search.PrioritySearchValues;
 
 @RestController
 @RequestMapping("/priority")
@@ -31,6 +32,12 @@ public class PriorityController {
     @GetMapping("/all")
     public List<Priority> findAll() {
         return priorityRepository.findAllByOrderByIdAsc();
+    }
+    
+    @PostMapping("/search")
+    public ResponseEntity<List<Priority>> findByTitle(@RequestBody PrioritySearchValues prioritySearchValues) {
+        
+        return ResponseEntity.ok(priorityRepository.findByTitle(prioritySearchValues.getTitle()));
     }
 
     @PostMapping("/post")

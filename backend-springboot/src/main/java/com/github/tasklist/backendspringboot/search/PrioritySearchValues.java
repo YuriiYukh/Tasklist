@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@RequiredArgsConstructor
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
-public class CategorySearchValues {
+public class PrioritySearchValues {
 
     private String title;
 }
