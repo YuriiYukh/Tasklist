@@ -22,7 +22,7 @@ public class StatController {
         this.statRepository = statRepository;
     }
     
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<Stat> showStat() {
         
         try {

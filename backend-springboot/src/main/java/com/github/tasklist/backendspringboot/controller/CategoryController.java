@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.tasklist.backendspringboot.entity.Category;
 import com.github.tasklist.backendspringboot.repo.CategoryRepository;
+import com.github.tasklist.backendspringboot.search.CategorySearchValues;
 
 @RestController
 @RequestMapping("/category")
@@ -24,6 +25,12 @@ public class CategoryController {
 
     public CategoryController(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Category>> findByTitle(@RequestBody CategorySearchValues categorySearchValues) {
+
+        return ResponseEntity.ok(categoryRepository.findByTitle(categorySearchValues.getText()));
     }
 
     @GetMapping("/all")
