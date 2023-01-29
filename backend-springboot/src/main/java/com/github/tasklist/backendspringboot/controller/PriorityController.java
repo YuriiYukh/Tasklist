@@ -85,6 +85,7 @@ public class PriorityController {
         try {
             priorityRepository.deleteById(id);
             return new ResponseEntity(HttpStatus.OK);
+            
         } catch (EmptyResultDataAccessException e) {
             return new ResponseEntity("No element found with " + id + " id found", HttpStatus.NOT_FOUND);
         }
