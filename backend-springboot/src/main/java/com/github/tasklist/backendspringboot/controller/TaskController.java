@@ -22,20 +22,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.tasklist.backendspringboot.entity.Task;
 import com.github.tasklist.backendspringboot.repo.TaskRepository;
 import com.github.tasklist.backendspringboot.search.TaskSearchValues;
+import com.github.tasklist.backendspringboot.service.TaskService;
 
 @RestController
 @RequestMapping("/task")
 public class TaskController {
 
-    private final TaskRepository taskRepository;
+    private final TaskService taskService;
 
-    public TaskController(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Task>> findAll() {
-        return ResponseEntity.ok(taskRepository.findAll());
+        return ResponseEntity.ok(taskService.findAll());
     }
 
     @PostMapping("/search")
@@ -60,7 +61,7 @@ public class TaskController {
         Sort sort = Sort.by(sortDirection == null || sortDirection.trim().equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sortColumn);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
         
-        return ResponseEntity.ok(taskRepository.findByParams(title, completed, priorityId, categoryId, pageRequest));
+        return ResponseEntity.ok(taskService.findByParams(title, completed, priorityId, categoryId, pageRequest));
     }
 
     @PostMapping("/add")
@@ -74,7 +75,7 @@ public class TaskController {
             return new ResponseEntity("title must be filled", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(taskRepository.save(task));
+        return ResponseEntity.ok(taskService.add(task));
     }
 
     @PutMapping("/update")
@@ -88,14 +89,14 @@ public class TaskController {
             return new ResponseEntity("title must be filled", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(taskRepository.save(task));
+        return ResponseEntity.ok(taskService.update(task));
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Task> findById(@PathVariable Long id) {
 
         try {
-            return ResponseEntity.ok(taskRepository.findById(id).orElseThrow(NoSuchElementException::new));
+            return ResponseEntity.ok(taskService.findById(id));
 
         } catch (NoSuchElementException e) {
             return new ResponseEntity("No element found with " + id + " id found", HttpStatus.NOT_FOUND);
@@ -105,7 +106,7 @@ public class TaskController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Task> deleteById(@PathVariable Long id) {
         try {
-            taskRepository.deleteById(id);
+            taskService.deleteById(id);
             return new ResponseEntity(HttpStatus.OK);
 
         } catch (EmptyResultDataAccessException e) {

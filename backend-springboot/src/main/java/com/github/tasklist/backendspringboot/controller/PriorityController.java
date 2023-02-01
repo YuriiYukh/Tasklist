@@ -16,28 +16,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.tasklist.backendspringboot.entity.Priority;
-import com.github.tasklist.backendspringboot.repo.PriorityRepository;
 import com.github.tasklist.backendspringboot.search.PrioritySearchValues;
+import com.github.tasklist.backendspringboot.service.PriorityService;
 
 @RestController
 @RequestMapping("/priority")
 public class PriorityController {
 
-    private final PriorityRepository priorityRepository;
+    private final PriorityService priorityService;
 
-    public PriorityController(PriorityRepository priorityRepository) {
-        this.priorityRepository = priorityRepository;
+    public PriorityController(PriorityService priorityService) {
+        this.priorityService = priorityService;
     }
 
     @GetMapping("/all")
     public List<Priority> findAll() {
-        return priorityRepository.findAllByOrderByIdAsc();
+        return priorityService.findAllByOrderByIdAsc();
     }
-    
+
     @PostMapping("/search")
     public ResponseEntity<List<Priority>> findByTitle(@RequestBody PrioritySearchValues prioritySearchValues) {
-        
-        return ResponseEntity.ok(priorityRepository.findByTitle(prioritySearchValues.getTitle()));
+
+        return ResponseEntity.ok(priorityService.findByTitle(prioritySearchValues.getTitle()));
     }
 
     @PostMapping("/post")
@@ -55,7 +55,7 @@ public class PriorityController {
             return new ResponseEntity("color must be filled", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(priorityRepository.save(priority));
+        return ResponseEntity.ok(priorityService.add(priority));
     }
 
     @PutMapping("/update")
@@ -73,26 +73,26 @@ public class PriorityController {
             return new ResponseEntity("color must be filled", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(priorityRepository.save(priority));
+        return ResponseEntity.ok(priorityService.update(priority));
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Priority> findById(@PathVariable Long id) {
 
         try {
-            return ResponseEntity.ok(priorityRepository.findById(id).orElseThrow(NoSuchElementException::new));
+            return ResponseEntity.ok(priorityService.findById(id));
 
         } catch (NoSuchElementException e) {
             return new ResponseEntity("No element found with " + id + " id found", HttpStatus.NOT_FOUND);
         }
     }
-    
+
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Priority> deleteById(@PathVariable Long id){
+    public ResponseEntity<Priority> deleteById(@PathVariable Long id) {
         try {
-            priorityRepository.deleteById(id);
+            priorityService.deleteById(id);
             return new ResponseEntity(HttpStatus.OK);
-            
+
         } catch (EmptyResultDataAccessException e) {
             return new ResponseEntity("No element found with " + id + " id found", HttpStatus.NOT_FOUND);
         }

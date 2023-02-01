@@ -16,30 +16,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.tasklist.backendspringboot.entity.Category;
-import com.github.tasklist.backendspringboot.entity.Priority;
-import com.github.tasklist.backendspringboot.repo.CategoryRepository;
 import com.github.tasklist.backendspringboot.search.CategorySearchValues;
+import com.github.tasklist.backendspringboot.service.CategoryService;
 
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @PostMapping("/search")
     public ResponseEntity<List<Category>> findByTitle(@RequestBody CategorySearchValues categorySearchValues) {
 
-        return ResponseEntity.ok(categoryRepository.findByTitle(categorySearchValues.getTitle()));
+        return ResponseEntity.ok(categoryService.findByTitle(categorySearchValues.getTitle()));
     }
 
     @GetMapping("/all")
     public List<Category> findAll() {
 
-        return categoryRepository.findAllByOrderByTitleDesc();
+        return categoryService.findByOrderByTitleDesc();
     }
 
     @PostMapping("/post")
@@ -53,7 +52,7 @@ public class CategoryController {
             return new ResponseEntity("title must be filled", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(categoryRepository.save(category));
+        return ResponseEntity.ok(categoryService.add(category));
     }
 
     @PutMapping("/update")
@@ -67,14 +66,14 @@ public class CategoryController {
             return new ResponseEntity("title must be filled", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return ResponseEntity.ok(categoryRepository.save(category));
+        return ResponseEntity.ok(categoryService.update(category));
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<Category> findById(@PathVariable Long id) {
 
         try {
-            return ResponseEntity.ok(categoryRepository.findById(id).orElseThrow(NoSuchElementException::new));
+            return ResponseEntity.ok(categoryService.findById(id));
 
         } catch (NoSuchElementException e) {
             return new ResponseEntity("No element found with " + id + " id found", HttpStatus.NOT_FOUND);
@@ -84,7 +83,7 @@ public class CategoryController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Category> deleteById(@PathVariable Long id) {
         try {
-            categoryRepository.deleteById(id);
+            categoryService.deleteById(id);
             return new ResponseEntity(HttpStatus.OK);
 
         } catch (EmptyResultDataAccessException e) {
