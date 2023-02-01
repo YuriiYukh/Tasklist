@@ -3,8 +3,10 @@ package com.github.tasklist.backendspringboot.controller;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.tasklist.backendspringboot.entity.Category;
+import com.github.tasklist.backendspringboot.entity.Priority;
 import com.github.tasklist.backendspringboot.repo.CategoryRepository;
 import com.github.tasklist.backendspringboot.search.CategorySearchValues;
 
@@ -74,6 +77,17 @@ public class CategoryController {
             return ResponseEntity.ok(categoryRepository.findById(id).orElseThrow(NoSuchElementException::new));
 
         } catch (NoSuchElementException e) {
+            return new ResponseEntity("No element found with " + id + " id found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Category> deleteById(@PathVariable Long id) {
+        try {
+            categoryRepository.deleteById(id);
+            return new ResponseEntity(HttpStatus.OK);
+
+        } catch (EmptyResultDataAccessException e) {
             return new ResponseEntity("No element found with " + id + " id found", HttpStatus.NOT_FOUND);
         }
     }

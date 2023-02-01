@@ -87,7 +87,7 @@ public class PriorityController {
         }
     }
     
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Priority> deleteById(@PathVariable Long id){
         try {
             priorityRepository.deleteById(id);

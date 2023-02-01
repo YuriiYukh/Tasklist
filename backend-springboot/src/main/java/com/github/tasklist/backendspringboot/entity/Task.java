@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @EqualsAndHashCode
+@AllArgsConstructor
 @Table(name = "task")
 public class Task {
     private Long id;
@@ -61,7 +63,7 @@ public class Task {
     }
     
     @ManyToOne
-    @JoinColumn(name = "cateroty_id", referencedColumnName = "id")
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     public Category getCategory() {
         return category;
     }
