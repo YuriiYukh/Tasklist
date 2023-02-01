@@ -7,12 +7,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import com.github.tasklist.backendspringboot.entity.Category;
 import com.github.tasklist.backendspringboot.entity.Task;
-import com.github.tasklist.backendspringboot.repo.CategoryRepository;
 import com.github.tasklist.backendspringboot.repo.TaskRepository;
 
 @Service
